@@ -14,7 +14,7 @@ function getMetaData(sample) {
 };
 
 function buildCharts(sample) {
-    d3.json("samples.json").then((incomingData) => {
+    d3.json("data/samples.json").then((incomingData) => {
   //Point to the sample portion of the data file(samples.json)
       var samples = incomingData.samples;
 
@@ -90,7 +90,7 @@ function init() {
   var dropdown = d3.select("#selDataset");
 
   // read the data 
-  d3.json("samples.json").then((incomingData)=> {
+  d3.json("data/samples.json").then((incomingData)=> {
       console.log(incomingData)
 
       // get the id data to the dropdwown menu
