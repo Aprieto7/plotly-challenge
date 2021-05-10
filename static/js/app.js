@@ -16,16 +16,15 @@ function getMeteData(sample) {
   });
 };
 
-function charts(sample); 
-  d3.json("data/samples.json").then((incomingData) => {
-  var samples = incomingData.samples;
+function buildCharts(sample) {
+  d3.json("samples.json").then((data) => {
+//Point to the sample portion of the data file(samples.json)
+    var samples = data.samples;
 
-  //var barChart = d3.select("#bar");
-  //var bubbleChart = d3.select("#bubble");
-
-  var resultArray = samples.filter(samples => samples.id == sample);
-  var result = resultArray[0];
-  
-  var otuID = result.otuID;
-  var otuLabels = result.otu.otuLabels; 
+//Create the result array based on the 'sample'(created in the init function)
+    var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
+    var result = resultArray[0];
+    
+//assign the otu_ids, sample_values, and otu_labels to variables to use in plots
+    var otu_ids = result.otu_ids;
   
