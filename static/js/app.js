@@ -1,12 +1,16 @@
 //Code
 function getMetaData(sample) {
-  d3.json("data/samples.json").then((incomingData) => {
-    var metaData = incomingData.metaData;
-    incomingData.names.forEach((name => {
-        var option = idSelect.append("option");
-        option.text(name);
-    }));
-    var sampleMetadata = d3.select("#sample-metadata");
+  d3.json("../Data/samples.json").then((incomingData) => {
+    var resultArray = incomingData.metadata.filter(sampleObj => sampleObj.id == sample);
+    var result = resultArray[0];
+    console.log(result)
+    var sampleMetadata = d3.select("#sample-metadata")
+    sampleMetadata.html(" ");
+    Object.entries(result).forEach(([key, value]) => {
+      sampleMetadata.append("p").text(`${key}: ${value}`)
+
+    });
+    ;
     var getMeteData = idSelect.property("#value")
 
     plotCharts(getMetaData);
@@ -14,14 +18,14 @@ function getMetaData(sample) {
 };
 
 function buildCharts(sample) {
-    d3.json("data/samples.json").then((incomingData) => {
+    d3.json("../Data/samples.json").then((incomingData) => {
   //Point to the sample portion of the data file(samples.json)
       var samples = incomingData.samples;
 
   //Create the result array based on the 'sample'(created in the init function)
       var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
       var result = resultArray[0];
-
+      console.log(result);
   //assign the otu_ids, sample_values, and otu_labels to variables to use in plots
       var otu_ids = result.otu_ids;
       var sampleValues = result.sampleValues;
@@ -52,7 +56,7 @@ function buildCharts(sample) {
     }
   };
 
-// Render the plot to the div tag with id "plot"
+
 Plotly.newPlot("plot", data, layout);
 
         // The bubble chart
@@ -84,22 +88,27 @@ Plotly.newPlot("plot", data, layout);
   });
 } 
 
+// Function for optionChanged
+function optionChanged (sample) {
+  getMetaData(sample);
+}
+
 // create the function for the initial data rendering
 function init() {
   // select dropdown menu 
   var dropdown = d3.select("#selDataset");
 
   // read the data 
-  d3.json("data/samples.json").then((incomingData)=> {
+  d3.json("../Data/samples.json").then((incomingData)=> {
       console.log(incomingData)
 
       // get the id data to the dropdwown menu
       incomingData.names.forEach(function(name) {
-          dropdown.append("option").text(name).property("value");
+          dropdown.append("option").text(name).property("value", name);
       });
 
       // call the functions to display the data and the plots to the page
-      buildCharts(incomingData.names[0]);
+      //buildCharts(incomingData.names[0]);
       getMetaData(incomingData.names[0]);
   });
 }
