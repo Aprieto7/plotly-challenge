@@ -6,26 +6,23 @@ function getMetaData(sample) {
     console.log(result)
     var sampleMetadata = d3.select("#sample-metadata")
     sampleMetadata.html(" ");
+
     Object.entries(result).forEach(([key, value]) => {
       sampleMetadata.append("p").text(`${key}: ${value}`)
-
     });
-    ;
-    var getMeteData = idSelect.property("#value")
-
-    plotCharts(getMetaData);
   });
 };
 
 function buildCharts(sample) {
     d3.json("../Data/samples.json").then((incomingData) => {
   //Point to the sample portion of the data file(samples.json)
-      var samples = incomingData.samples;
+      var samples = incomingData.sample;
 
   //Create the result array based on the 'sample'(created in the init function)
       var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
       var result = resultArray[0];
       console.log(result);
+
   //assign the otu_ids, sample_values, and otu_labels to variables to use in plots
       var otu_ids = result.otu_ids;
       var sampleValues = result.sampleValues;
@@ -47,7 +44,7 @@ function buildCharts(sample) {
   var data = [trace];
 
   var layout = {
-    title: "Greek gods search results",
+    title: "Belly Button Diversity",
     margin: {
       l: 100,
       r: 100,
@@ -57,12 +54,12 @@ function buildCharts(sample) {
   };
 
 
-Plotly.newPlot("plot", data, layout);
+Plotly.newPlot("#bar", data, layout);
 
         // The bubble chart
         var trace1 = {
-          x: incomingData.samples[0].otu_ids,
-          y: incomingData.samples[0].sample_values,
+          x: incomingData.otu_ids,
+          y: incomingData.sample[0].sample_values,
           mode: "markers",
           marker: {
               size: incomingData.samples[0].sample_values,
@@ -83,7 +80,7 @@ Plotly.newPlot("plot", data, layout);
       var data1 = [trace1];
 
   // create the bubble plot
-  Plotly.newPlot("bubble", data1, layout_2); 
+  Plotly.newPlot("#bubble", data1, layout_2); 
   
   });
 } 
@@ -109,7 +106,7 @@ function init() {
 
       // call the functions to display the data and the plots to the page
       //buildCharts(incomingData.names[0]);
-      getMetaData(incomingData.names[0]);
+      getMetaData(incomingData.name[0]);
   });
 }
 
