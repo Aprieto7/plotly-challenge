@@ -24,7 +24,7 @@ function buildCharts(sample) {
       console.log(result);
 
   //assign the otu_ids, sample_values, and otu_labels to variables to use in plots
-      var otu_ids = result.otu_ids.slice(0,10).reverse().map(d => "otu_ids" + d);
+      var otu_ids = result.otu_ids.slice(0,10).reverse().map(d => "OTU ID " + d);
       var sampleValues = result.sample_values.slice(0,10).reverse();
       var otu_labels = result.otu_labels.slice(0,10).reverse();
 
@@ -70,6 +70,7 @@ Plotly.newPlot("bar", data, layout);
 
       // set the layout for the bubble plot
       var layout_2 = {
+          title: "Bacteria Cultures per Sample",
           xaxis:{title: "OTU ID"},
           height: 600,
           width: 1000
