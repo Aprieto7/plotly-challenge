@@ -1,6 +1,6 @@
 //Code
 function getMetaData(sample) {
-  d3.json("../Data/samples.json").then((incomingData) => {
+  d3.json("Data/samples.json").then((incomingData) => {
     var resultArray = incomingData.metadata.filter(sampleObj => sampleObj.id == sample);
     var result = resultArray[0];
     console.log(result)
@@ -14,9 +14,9 @@ function getMetaData(sample) {
 };
 
 function buildCharts(sample) {
-    d3.json("../Data/samples.json").then((incomingData) => {
+    d3.json("Data/samples.json").then((incomingData) => {
   //Point to the sample portion of the data file(samples.json)
-      var samples = incomingData.sample;
+      var samples = incomingData.samples;
 
   //Create the result array based on the 'sample'(created in the init function)
       var resultArray = samples.filter(sampleObj => sampleObj.id == sample);
@@ -24,16 +24,15 @@ function buildCharts(sample) {
       console.log(result);
 
   //assign the otu_ids, sample_values, and otu_labels to variables to use in plots
-      var otu_ids = result.otu_ids;
-      var sampleValues = result.sampleValues;
-      var otu_labels = result.otu_labels.slice(0,10);
-      reversedData = otu_labels.reverse();
+      var otu_ids = result.otu_ids.slice(0,10).reverse().map(d => "otu_ids" + d);
+      var sampleValues = result.sample_values.slice(0,10).reverse();
+      var otu_labels = result.otu_labels.slice(0,10).reverse();
 
   //Build Bar Chart
   var trace = {
     x: sampleValues,
     y: otu_ids,
-    text: reversedData,
+    text: otu_labels,
     marker: {
     color: 'blue'},
     type:"bar",
@@ -54,18 +53,18 @@ function buildCharts(sample) {
   };
 
 
-Plotly.newPlot("#bar", data, layout);
+Plotly.newPlot("bar", data, layout);
 
         // The bubble chart
         var trace1 = {
-          x: incomingData.otu_ids,
-          y: incomingData.sample[0].sample_values,
+          x: result.otu_ids,
+          y: result.sampleValues,
           mode: "markers",
           marker: {
-              size: incomingData.samples[0].sample_values,
-              color: incomingData.samples[0].otu_ids
+              size: result.sampleValues,
+              color: result.otu_ids
           },
-          text:  incomingData.samples[0].otu_labels
+          text: result.otu_labels
 
       };
 
@@ -80,7 +79,7 @@ Plotly.newPlot("#bar", data, layout);
       var data1 = [trace1];
 
   // create the bubble plot
-  Plotly.newPlot("#bubble", data1, layout_2); 
+  Plotly.newPlot("bubble", data1, layout_2); 
   
   });
 } 
@@ -88,6 +87,7 @@ Plotly.newPlot("#bar", data, layout);
 // Function for optionChanged
 function optionChanged (sample) {
   getMetaData(sample);
+  buildCharts(sample);
 }
 
 // create the function for the initial data rendering
@@ -96,7 +96,7 @@ function init() {
   var dropdown = d3.select("#selDataset");
 
   // read the data 
-  d3.json("../Data/samples.json").then((incomingData)=> {
+  d3.json("Data/samples.json").then((incomingData)=> {
       console.log(incomingData)
 
       // get the id data to the dropdwown menu
@@ -105,8 +105,8 @@ function init() {
       });
 
       // call the functions to display the data and the plots to the page
-      //buildCharts(incomingData.names[0]);
-      getMetaData(incomingData.name[0]);
+      buildCharts(incomingData.names[0]);
+      getMetaData(incomingData.names[0]);
   });
 }
 
