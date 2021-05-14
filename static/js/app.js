@@ -1,4 +1,4 @@
-//Code
+//Code 
 function getMetaData(sample) {
   d3.json("Data/samples.json").then((incomingData) => {
     var resultArray = incomingData.metadata.filter(sampleObj => sampleObj.id == sample);
